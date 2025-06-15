@@ -157,7 +157,7 @@ export default function Home() {
               What Our Clients Say
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Don't just take our word for it - hear from our satisfied customers
+              Do not just take our word for it - hear from our satisfied customers
             </p>
           </div>
           
@@ -204,7 +204,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Let's Create Magic Together
+              Let us Create Magic Together
             </h2>
             <p className="text-xl text-pink-100 max-w-2xl mx-auto">
               Ready to transform your event? Get in touch for a free consultation and quote
