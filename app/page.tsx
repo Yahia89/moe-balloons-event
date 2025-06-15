@@ -190,7 +190,7 @@ export default function Home() {
                     <span key={i} className="text-yellow-400 text-xl">⭐</span>
                   ))}
                 </div>
-                <p className="text-gray-700 mb-6 italic">"{testimonial.text}"</p>
+                <p className="text-gray-700 mb-6 italic">&ldquo;{testimonial.text}&rdquo;</p>
                 <div>
                   <p className="font-semibold text-gray-900">{testimonial.name}</p>
                   <p className="text-sm text-gray-600">{testimonial.event}</p>
@@ -241,6 +241,44 @@ export default function Home() {
               </div>
             </div>
             
+            <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl">
+              <form className="space-y-6">
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-pink-100 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="email"
+                    placeholder="Your Email"
+                    className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-pink-100 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Event Type"
+                    className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-pink-100 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  />
+                </div>
+                <div>
+                  <textarea
+                    rows={4}
+                    placeholder="Tell us about your event..."
+                    className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-pink-100 focus:outline-none focus:ring-2 focus:ring-white/50 resize-none"
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-white text-purple-600 px-6 py-3 rounded-lg font-semibold hover:bg-pink-50 transition-colors"
+                >
+                  Send Message
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </section>
