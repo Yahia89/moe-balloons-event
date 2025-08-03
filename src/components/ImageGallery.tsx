@@ -29,6 +29,7 @@ export default function ImageGallery({ className = '' }: ImageGalleryProps) {
       setImages(galleryImages);
       setIsLoading(false);
     } catch (err) {
+      console.error('Failed to load gallery images:', err);
       setError('Failed to load gallery images');
       setIsLoading(false);
     }
@@ -57,7 +58,7 @@ export default function ImageGallery({ className = '' }: ImageGalleryProps) {
           Unable to Load Gallery
         </h3>
         <p className="text-gray-600 mb-4">
-          We're having trouble loading our event photos right now.
+          We&apos;re having trouble loading our event photos right now.
         </p>
         <a
           href="#contact"
@@ -78,7 +79,7 @@ export default function ImageGallery({ className = '' }: ImageGalleryProps) {
           Gallery Coming Soon
         </h3>
         <p className="text-gray-600 mb-4">
-          We're currently updating our gallery with beautiful event photos.
+          We&apos;re currently updating our gallery with beautiful event photos.
         </p>
         <a
           href="#contact"
