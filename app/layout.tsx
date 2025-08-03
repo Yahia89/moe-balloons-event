@@ -1,6 +1,18 @@
 import '../src/app/globals.css'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Moe Balloons Event - Premium Balloon Decorations & Event Planning',
+  description: 'Transform your special events with stunning balloon decorations. Professional balloon arches, centerpieces, and custom designs for weddings, birthdays, corporate events, and more.',
+  keywords: 'balloon decorations, event planning, balloon arches, wedding decorations, birthday parties, corporate events, balloon artist',
+  openGraph: {
+    title: 'Moe Balloons Event - Premium Balloon Decorations',
+    description: 'Professional balloon decorations and event planning services',
+    images: ['/og-image.jpg'],
+  },
+}
 
 const inter = Inter({ subsets: ['latin'] })
 

@@ -1,17 +1,137 @@
-import { Metadata } from 'next'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Moe Balloons Event - Premium Balloon Decorations & Event Planning',
-  description: 'Transform your special events with stunning balloon decorations. Professional balloon arches, centerpieces, and custom designs for weddings, birthdays, corporate events, and more.',
-  keywords: 'balloon decorations, event planning, balloon arches, wedding decorations, birthday parties, corporate events, balloon artist',
-  openGraph: {
-    title: 'Moe Balloons Event - Premium Balloon Decorations',
-    description: 'Professional balloon decorations and event planning services',
-    images: ['/og-image.jpg'],
-  },
-}
+import { useState, useEffect, useRef } from 'react'
+import ImageGallery from '../src/components/ImageGallery'
 
 export default function Home() {
+  // Mobile menu state management
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
+  const firstFocusableElementRef = useRef<HTMLAnchorElement>(null);
+  const lastFocusableElementRef = useRef<HTMLAnchorElement>(null);
+
+  // Toggle function for hamburger menu button (will be used in task 2)
+  const toggleMobileMenu = () => {
+    console.log('Hamburger button clicked! Current state:', isMobileMenuOpen);
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  // Close function for menu interactions (will be used in task 6)
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+    // Return focus to hamburger button when menu closes
+    if (hamburgerButtonRef.current) {
+      hamburgerButtonRef.current.focus();
+    }
+  };
+
+  // Handle click outside to close mobile menu
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobileMenuOpen &&
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target as Node) &&
+        hamburgerButtonRef.current &&
+        !hamburgerButtonRef.current.contains(event.target as Node)) {
+        closeMobileMenu();
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
+  // Handle escape key to close mobile menu
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isMobileMenuOpen) {
+        closeMobileMenu();
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('keydown', handleEscapeKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [isMobileMenuOpen]);
+
+  // Focus management for mobile menu
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      // Focus the first focusable element when menu opens
+      if (firstFocusableElementRef.current) {
+        firstFocusableElementRef.current.focus();
+      }
+    }
+  }, [isMobileMenuOpen]);
+
+  // Scroll lock when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      // Store the current scroll position
+      const scrollY = window.scrollY;
+
+      // Prevent body scrolling
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+
+      // Handle iOS Safari specific issues and prevent bounce scrolling
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.position = 'fixed';
+      document.documentElement.style.width = '100%';
+      document.documentElement.style.height = '100%';
+
+      return () => {
+        // Restore normal scrolling
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.documentElement.style.overflow = '';
+        document.documentElement.style.position = '';
+        document.documentElement.style.width = '';
+        document.documentElement.style.height = '';
+
+        // Restore scroll position (use requestAnimationFrame for better performance)
+        requestAnimationFrame(() => {
+          window.scrollTo(0, scrollY);
+        });
+      };
+    }
+  }, [isMobileMenuOpen]);
+
+  // Focus trap within mobile menu
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (!isMobileMenuOpen) return;
+
+    if (event.key === 'Tab') {
+      if (event.shiftKey) {
+        // Shift + Tab - moving backwards
+        if (document.activeElement === firstFocusableElementRef.current) {
+          event.preventDefault();
+          lastFocusableElementRef.current?.focus();
+        }
+      } else {
+        // Tab - moving forwards
+        if (document.activeElement === lastFocusableElementRef.current) {
+          event.preventDefault();
+          firstFocusableElementRef.current?.focus();
+        }
+      }
+    }
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
       {/* Navigation */}
@@ -23,6 +143,7 @@ export default function Home() {
                 Moe Balloons Event
               </h1>
             </div>
+            {/* Desktop Navigation */}
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 <a href="#home" className="text-gray-700 hover:text-pink-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
@@ -31,6 +152,146 @@ export default function Home() {
                 <a href="#testimonials" className="text-gray-700 hover:text-pink-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">Reviews</a>
                 <a href="#contact" className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:shadow-lg transition-all">Contact</a>
               </div>
+            </div>
+
+            {/* Mobile Hamburger Button */}
+            <div className="md:hidden relative z-50">
+              <button
+                ref={hamburgerButtonRef}
+                onClick={toggleMobileMenu}
+                type="button"
+                className="inline-flex items-center justify-center p-3 rounded-md text-gray-700 hover:text-pink-500 hover:bg-pink-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-500 transition-colors cursor-pointer relative z-50 min-w-[44px] min-h-[44px]"
+                aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-navigation-menu"
+                aria-haspopup="true"
+                style={{ touchAction: 'manipulation' }}
+              >
+                <span className="sr-only">{isMobileMenuOpen ? "Close main menu" : "Open main menu"}</span>
+                {/* Hamburger icon with smooth animation */}
+                <div className="w-6 h-6 flex flex-col justify-center items-center relative">
+                  <span
+                    className={`block h-0.5 w-6 bg-current absolute transition-all duration-300 ease-in-out ${isMobileMenuOpen
+                      ? 'rotate-45 translate-y-0'
+                      : 'rotate-0 -translate-y-1.5'
+                      }`}
+                    style={{ transformOrigin: 'center' }}
+                  ></span>
+                  <span
+                    className={`block h-0.5 w-6 bg-current absolute transition-all duration-300 ease-in-out ${isMobileMenuOpen
+                      ? 'opacity-0 scale-75'
+                      : 'opacity-100 scale-100'
+                      }`}
+                    style={{ transformOrigin: 'center' }}
+                  ></span>
+                  <span
+                    className={`block h-0.5 w-6 bg-current absolute transition-all duration-300 ease-in-out ${isMobileMenuOpen
+                      ? '-rotate-45 translate-y-0'
+                      : 'rotate-0 translate-y-1.5'
+                      }`}
+                    style={{ transformOrigin: 'center' }}
+                  ></span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Overlay */}
+        <div
+          ref={mobileMenuRef}
+          id="mobile-navigation-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="mobile-menu-heading"
+          aria-hidden={!isMobileMenuOpen}
+          onKeyDown={handleKeyDown}
+          className={`md:hidden fixed inset-0 z-40 bg-white/95 transform transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+            }`}
+          style={{
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%)',
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+          }}
+        >
+          <div className="flex flex-col h-full pt-16">
+            <div className="flex-1 px-4 py-8">
+              <h2 id="mobile-menu-heading" className="sr-only">Mobile Navigation Menu</h2>
+              <nav role="navigation" aria-label="Mobile navigation" className="space-y-6">
+                <a
+                  ref={firstFocusableElementRef}
+                  href="#home"
+                  onClick={closeMobileMenu}
+                  className={`block text-2xl font-medium text-gray-700 hover:text-pink-500 focus:text-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-300 py-3 border-b border-gray-100 ${isMobileMenuOpen
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-4'
+                    }`}
+                  style={{
+                    transitionDelay: isMobileMenuOpen ? '100ms' : '0ms'
+                  }}
+                  tabIndex={isMobileMenuOpen ? 0 : -1}
+                >
+                  Home
+                </a>
+                <a
+                  href="#services"
+                  onClick={closeMobileMenu}
+                  className={`block text-2xl font-medium text-gray-700 hover:text-pink-500 focus:text-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-300 py-3 border-b border-gray-100 ${isMobileMenuOpen
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-4'
+                    }`}
+                  style={{
+                    transitionDelay: isMobileMenuOpen ? '200ms' : '0ms'
+                  }}
+                  tabIndex={isMobileMenuOpen ? 0 : -1}
+                >
+                  Services
+                </a>
+                <a
+                  href="#gallery"
+                  onClick={closeMobileMenu}
+                  className={`block text-2xl font-medium text-gray-700 hover:text-pink-500 focus:text-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-300 py-3 border-b border-gray-100 ${isMobileMenuOpen
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-4'
+                    }`}
+                  style={{
+                    transitionDelay: isMobileMenuOpen ? '300ms' : '0ms'
+                  }}
+                  tabIndex={isMobileMenuOpen ? 0 : -1}
+                >
+                  Gallery
+                </a>
+                <a
+                  href="#testimonials"
+                  onClick={closeMobileMenu}
+                  className={`block text-2xl font-medium text-gray-700 hover:text-pink-500 focus:text-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-300 py-3 border-b border-gray-100 ${isMobileMenuOpen
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-4'
+                    }`}
+                  style={{
+                    transitionDelay: isMobileMenuOpen ? '400ms' : '0ms'
+                  }}
+                  tabIndex={isMobileMenuOpen ? 0 : -1}
+                >
+                  Reviews
+                </a>
+                <a
+                  ref={lastFocusableElementRef}
+                  href="#contact"
+                  onClick={closeMobileMenu}
+                  className={`block bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-4 rounded-full text-xl font-medium text-center hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-purple-600 transition-all duration-300 mt-8 ${isMobileMenuOpen
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-4'
+                    }`}
+                  style={{
+                    transitionDelay: isMobileMenuOpen ? '500ms' : '0ms'
+                  }}
+                  tabIndex={isMobileMenuOpen ? 0 : -1}
+                >
+                  Contact
+                </a>
+              </nav>
             </div>
           </div>
         </div>
@@ -47,7 +308,7 @@ export default function Home() {
                   Magical
                 </span>
               </h1>
-              <div className="absolute -top-4 -right-4 text-4xl animate-bounce">🎈</div>
+              <div className="absolute -top-4 -right-4 text-6xl animate-bounce">🎈</div>
             </div>
             <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
               Professional balloon decorations and event planning services that transform ordinary moments into extraordinary memories
@@ -75,11 +336,11 @@ export default function Home() {
               From intimate gatherings to grand celebrations, we create stunning balloon decorations for every occasion
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                icon: "💒",
+                icon: "🏣",
                 title: "Wedding Decorations",
                 description: "Elegant balloon arches, centerpieces, and romantic setups for your special day"
               },
@@ -130,22 +391,8 @@ export default function Home() {
               Take a look at some of our recent balloon decoration projects
             </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map((item) => (
-              <div key={item} className="relative group overflow-hidden rounded-2xl aspect-square bg-gradient-to-br from-pink-200 to-purple-200">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h4 className="font-semibold">Event Project {item}</h4>
-                    <p className="text-sm opacity-90">Beautiful balloon decoration</p>
-                  </div>
-                </div>
-                <div className="w-full h-full flex items-center justify-center text-6xl">
-                  🎈
-                </div>
-              </div>
-            ))}
-          </div>
+
+          <ImageGallery />
         </div>
       </section>
 
@@ -160,7 +407,7 @@ export default function Home() {
               Do not just take our word for it - hear from our satisfied customers
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
@@ -210,7 +457,7 @@ export default function Home() {
               Ready to transform your event? Get in touch for a free consultation and quote
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="text-white">
               <h3 className="text-2xl font-bold mb-6">Get In Touch</h3>
@@ -238,7 +485,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl">
               <form className="space-y-6">
                 <div>
@@ -303,7 +550,7 @@ export default function Home() {
               </a>
             </div>
             <p className="text-gray-500 text-sm">
-              © 2024 Moe Balloons Event. All rights reserved.
+              © 2025 Moe Balloons Event. All rights reserved.
             </p>
           </div>
         </div>
