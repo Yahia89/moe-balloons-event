@@ -206,17 +206,17 @@ export default function Home() {
           aria-labelledby="mobile-menu-heading"
           aria-hidden={!isMobileMenuOpen}
           onKeyDown={handleKeyDown}
-          className={`md:hidden fixed inset-0 z-40 bg-white/95 transform transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+          className={`md:hidden fixed inset-0 z-40 transform transition-all duration-300 ease-in-out ${isMobileMenuOpen
+              ? 'translate-y-0 opacity-100'
+              : '-translate-y-full opacity-0'
             }`}
           style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%)',
-            backdropFilter: 'blur(20px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+            backgroundColor: '#333',
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
           }}
         >
-          <div className="flex flex-col h-full pt-16">
-            <div className="flex-1 px-4 py-8">
+          <div className="flex flex-col h-full pt-16 bg-black">
+            <div className="flex-1 px-4 py-8 bg-black">
               <h2 id="mobile-menu-heading" className="sr-only">Mobile Navigation Menu</h2>
               <nav role="navigation" aria-label="Mobile navigation" className="space-y-6">
                 <a
@@ -466,16 +466,16 @@ export default function Home() {
                   <span className="text-2xl mr-4">📞</span>
                   <div>
                     <p className="font-semibold">Phone</p>
-                    <p className="text-pink-100">+1 (555) 123-4567</p>
+                    <p className="text-pink-100">+1 (909) 575-9044</p>
                   </div>
                 </div>
-                <div className="flex items-center">
+                {/* <div className="flex items-center">
                   <span className="text-2xl mr-4">📧</span>
                   <div>
                     <p className="font-semibold">Email</p>
                     <p className="text-pink-100">hello@moeballoonsevent.com</p>
                   </div>
-                </div>
+                </div> */}
                 <div className="flex items-center">
                   <span className="text-2xl mr-4">📍</span>
                   <div>
@@ -486,7 +486,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl">
+            {/* <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl">
               <form className="space-y-6">
                 <div>
                   <input
@@ -523,7 +523,7 @@ export default function Home() {
                   Send Message
                 </button>
               </form>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>

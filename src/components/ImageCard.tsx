@@ -7,13 +7,16 @@ interface ImageCardProps {
 }
 
 export default function ImageCard({ image, onClick }: ImageCardProps) {
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
     onClick(image.index);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
+      event.stopPropagation();
       onClick(image.index);
     }
   };
@@ -26,14 +29,16 @@ export default function ImageCard({ image, onClick }: ImageCardProps) {
       tabIndex={0}
       role="button"
       aria-label={`View larger version of ${image.alt}`}
+      style={{ userSelect: 'none' }}
     >
       <Image
         src={image.src}
         alt={image.alt}
         fill
-        className="object-cover transition-transform duration-300 group-hover:scale-110"
+        className="object-cover transition-transform duration-300 group-hover:scale-110 pointer-events-none"
         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
         loading="lazy"
+        draggable={false}
       />
       
       {/* Hover overlay */}

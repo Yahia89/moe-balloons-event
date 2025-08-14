@@ -39,7 +39,7 @@ export function getGalleryImages(): ImageData[] {
     'PHOTO-2025-07-04-23-14-48.jpg',
     'PHOTO-2025-07-04-23-14-50.jpg',
     'PHOTO-2025-07-04-23-15-01.jpg',
-    'PHOTO-2025-07-04-23-15-02 2.jpg',
+    '7019a44b-a1a4-4a06-b717-e951aeb36781.jpg',
     'PHOTO-2025-07-04-23-15-02.jpg',
     'PHOTO-2025-07-04-23-15-03 2.jpg',
     'PHOTO-2025-07-04-23-15-03.jpg',
