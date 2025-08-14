@@ -51,6 +51,9 @@ export function getGalleryImages(): ImageData[] {
     'PHOTO-2025-07-04-23-21-08.jpg',
     'PHOTO-2025-07-04-23-25-35.jpg',
     'PHOTO-2025-07-04-23-25-39.jpg',
+    '11ac85f3-f6c2-40d7-88ee-310d8b2156c6.jpg',
+    '48afd2ec-5ddf-4469-9873-8e42135074ab.jpg',
+    '80e912f8-3eb3-4bbd-b3a2-9fee8f55bc08.jpg'
   ];
 
   return imageFilenames.map((filename, index) => ({
